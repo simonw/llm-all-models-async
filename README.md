@@ -15,21 +15,12 @@ llm install llm-all-models-async
 ```
 ## Usage
 
-Usage instructions go here.
+Once installed, any other model plugins that do not define both sync and async models (for example [llm-mrchatterbox](https://github.com/simonw/llm-mrchatterbox)) will gain an async version. Under the hood this uses a thread pool.
 
 ## Development
 
-To set up this plugin locally, first checkout the code. Then create a new virtual environment:
+To set up this plugin locally, first checkout the code. Then run the tests:
 ```bash
 cd llm-all-models-async
-python -m venv venv
-source venv/bin/activate
-```
-Now install the dependencies and test dependencies:
-```bash
-python -m pip install -e '.[test]'
-```
-To run the tests:
-```bash
-python -m pytest
+uv run pytest
 ```
