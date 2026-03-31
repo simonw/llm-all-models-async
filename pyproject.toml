@@ -31,11 +31,10 @@ make_all_models_async = "llm_make_all_models_async"
 dev = [
     "pytest",
     "pytest-asyncio",
-    "llm-mrchatterbox",
 ]
 
 [tool.uv.sources]
-llm-mrchatterbox = { path = "../../ecosystem/llm-mrchatterbox", editable = true }
+llm = { path = "../../../dev/llm", editable = true }
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
