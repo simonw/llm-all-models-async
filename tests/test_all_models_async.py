@@ -1,7 +1,6 @@
 import asyncio
 import llm
-import llm_make_all_models_async  # noqa: F401 - triggers monkey-patching
-from llm_make_all_models_async import AsyncModelWrapper, AsyncKeyModelWrapper
+from llm_all_models_async import AsyncModelWrapper, AsyncKeyModelWrapper
 import pytest
 
 
@@ -20,7 +19,7 @@ def register_sync_only():
         __name__ = "test_sync_only"
 
         @llm.hookimpl
-        def register_models(self, register):
+        def register_models(self, register, model_aliases):
             register(SyncOnlyModel())
 
     llm.pm.register(TestPlugin(), name="test_sync_only")
@@ -67,7 +66,7 @@ def test_already_async_model_not_wrapped():
         __name__ = "test_no_double_wrap"
 
         @llm.hookimpl
-        def register_models(self, register):
+        def register_models(self, register, model_aliases):
             register(SyncOnlyModel(), ExistingAsync())
 
     llm.pm.register(TestPlugin(), name="test_no_double_wrap")
@@ -93,7 +92,7 @@ def test_key_model_gets_async_key_wrapper():
         __name__ = "test_key_model"
 
         @llm.hookimpl
-        def register_models(self, register):
+        def register_models(self, register, model_aliases):
             register(SyncKeyModel())
 
     llm.pm.register(TestPlugin(), name="test_key_model")
@@ -127,7 +126,7 @@ def test_get_async_model_aliases_includes_wrapped():
         __name__ = "test_aliased"
 
         @llm.hookimpl
-        def register_models(self, register):
+        def register_models(self, register, model_aliases):
             register(AliasedSyncModel(), aliases=("aliased-test",))
 
     llm.pm.register(TestPlugin(), name="test_aliased")
@@ -153,7 +152,7 @@ def test_sync_model_error_propagates(register_sync_only):
         __name__ = "test_error"
 
         @llm.hookimpl
-        def register_models(self, register):
+        def register_models(self, register, model_aliases):
             register(ErrorModel())
 
     llm.pm.register(TestPlugin(), name="test_error")

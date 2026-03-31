@@ -1,8 +1,7 @@
 import asyncio
 import llm
 from concurrent.futures import ThreadPoolExecutor
-from typing import AsyncGenerator, Optional
-
+from typing import AsyncGenerator
 
 _executor = ThreadPoolExecutor(max_workers=4)
 
@@ -104,25 +103,11 @@ class AsyncKeyModelWrapper(llm.AsyncKeyModel):
             yield item
 
 
-def _make_async_wrapper(sync_model):
-    """Create an async wrapper for a sync model."""
-    if isinstance(sync_model, llm.KeyModel):
-        return AsyncKeyModelWrapper(sync_model)
-    return AsyncModelWrapper(sync_model)
-
-
-# Monkey-patch ModelWithAliases.__init__ to automatically add async wrappers
-# for sync-only models. This is the most reliable approach because
-# ModelWithAliases instances are created inside the register() callback,
-# which runs AFTER load_plugins() completes. So even on the very first call
-# to get_models_with_aliases(), all models will be wrapped.
-_original_mwa_init = llm.ModelWithAliases.__init__
-
-
-def _patched_mwa_init(self, model, async_model, aliases):
-    if model and not async_model:
-        async_model = _make_async_wrapper(model)
-    _original_mwa_init(self, model, async_model, aliases)
-
-
-llm.ModelWithAliases.__init__ = _patched_mwa_init
+@llm.hookimpl(trylast=True)
+def register_models(register, model_aliases):
+    for mwa in model_aliases:
+        if mwa.model and not mwa.async_model:
+            if isinstance(mwa.model, llm.KeyModel):
+                mwa.async_model = AsyncKeyModelWrapper(mwa.model)
+            else:
+                mwa.async_model = AsyncModelWrapper(mwa.model)

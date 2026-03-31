@@ -1,5 +1,5 @@
 [project]
-name = "llm-make-all-models-async"
+name = "llm-all-models-async"
 version = "0.1"
 description = "Make all LLM sync models available as async"
 readme = "README.md"
@@ -8,7 +8,7 @@ license = "Apache-2.0"
 classifiers = []
 requires-python = ">=3.10"
 dependencies = [
-    "llm"
+    "llm>=0.30"
 ]
 
 [build-system]
@@ -19,22 +19,19 @@ build-backend = "setuptools.build_meta"
 package = true
 
 [project.urls]
-Homepage = "https://github.com/simonw/llm-make-all-models-async"
-Changelog = "https://github.com/simonw/llm-make-all-models-async/releases"
-Issues = "https://github.com/simonw/llm-make-all-models-async/issues"
-CI = "https://github.com/simonw/llm-make-all-models-async/actions"
+Homepage = "https://github.com/simonw/llm-all-models-async"
+Changelog = "https://github.com/simonw/llm-all-models-async/releases"
+Issues = "https://github.com/simonw/llm-all-models-async/issues"
+CI = "https://github.com/simonw/llm-all-models-async/actions"
 
 [project.entry-points.llm]
-make_all_models_async = "llm_make_all_models_async"
+all_models_async = "llm_all_models_async"
 
 [dependency-groups]
 dev = [
     "pytest",
     "pytest-asyncio",
 ]
-
-[tool.uv.sources]
-llm = { path = "../../../dev/llm", editable = true }
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
