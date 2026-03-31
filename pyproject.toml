@@ -1,0 +1,41 @@
+[project]
+name = "llm-make-all-models-async"
+version = "0.1"
+description = "Make all LLM sync models available as async"
+readme = "README.md"
+authors = [{name = "Simon Willison"}]
+license = "Apache-2.0"
+classifiers = []
+requires-python = ">=3.10"
+dependencies = [
+    "llm"
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.uv]
+package = true
+
+[project.urls]
+Homepage = "https://github.com/simonw/llm-make-all-models-async"
+Changelog = "https://github.com/simonw/llm-make-all-models-async/releases"
+Issues = "https://github.com/simonw/llm-make-all-models-async/issues"
+CI = "https://github.com/simonw/llm-make-all-models-async/actions"
+
+[project.entry-points.llm]
+make_all_models_async = "llm_make_all_models_async"
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+    "llm-mrchatterbox",
+]
+
+[tool.uv.sources]
+llm-mrchatterbox = { path = "../../ecosystem/llm-mrchatterbox", editable = true }
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
